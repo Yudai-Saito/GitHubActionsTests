@@ -1,0 +1,18 @@
+name: set-assign
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  set-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              assignees: [context.payload.pull_request.user.login]
+            });
