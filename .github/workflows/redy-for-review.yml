@@ -1,4 +1,4 @@
-name: set-assign
+name: redy-for-review
 on:
   pull_request:
     types: [ready_for_review]
