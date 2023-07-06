@@ -1,0 +1,20 @@
+name: set-assign
+on:
+  pull_request:
+    types: [ready_for_review]
+
+jobs:
+  set-assign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            if (context.payload.pull_request.labels.some(label => label.name === 'preview')) {
+              github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                name: 'preview'
+              });
+            }
