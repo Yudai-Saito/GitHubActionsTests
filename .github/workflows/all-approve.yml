@@ -1,0 +1,29 @@
+name: all-approve
+on:
+  pull_request_review:
+    types: [review]
+
+jobs:
+  review-state:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const {data: reviwers} = github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              assignees: [context.payload.pull_request.user.login]
+            });
+
+            if (reviews.every(review => review.state === 'APPROVED')){
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                labels: ['レビュー済み']
+              });
+            }
+
+
