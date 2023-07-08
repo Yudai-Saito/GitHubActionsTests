@@ -7,7 +7,8 @@ jobs:
   set-assign:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v6
+      - name: Delete Preview Label
+        uses: actions/github-script@v6
         with:
           script: |
             if (context.payload.pull_request.labels.some(label => label.name === 'preview')) {
@@ -19,10 +20,8 @@ jobs:
               });
             }
 
-  set-label:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/github-script@v6
+      - name: Set Review Label
+        uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.addLabels({
