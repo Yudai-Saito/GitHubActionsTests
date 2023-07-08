@@ -16,12 +16,14 @@ jobs:
               pull_number: context.payload.pull_request.number
             });
 
-            github.rest.issues.removeLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              name: 'レビュー待ち'
-            });
+            if (context.payload.pull_request.labels.some(label => label.name === 'レビュー待ち')) {
+              github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                name: 'レビュー待ち'
+              });
+            }
 
             if (reviews.every(review => review.state === 'APPROVED')){
               github.rest.issues.addLabels({
