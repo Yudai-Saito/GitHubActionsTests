@@ -1,0 +1,32 @@
+name: redy-for-review
+on:
+  pull_request:
+    types: [ready_for_review]
+
+jobs:
+  ready-for-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete Preview Label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            if (context.payload.pull_request.labels.some(label => label.name === 'preview')) {
+              github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                name: 'preview'
+              });
+            }
+
+      - name: Set Review Label
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              labels: ['レビュー待ち']
+            });
