@@ -4,7 +4,7 @@ on:
     types: [ready_for_review]
 
 jobs:
-  set-assign:
+  ready-for-review:
     runs-on: ubuntu-latest
     steps:
       - name: Delete Preview Label
