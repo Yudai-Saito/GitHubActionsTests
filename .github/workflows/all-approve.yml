@@ -16,6 +16,13 @@ jobs:
               pull_number: context.payload.pull_request.number
             });
 
+            github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              name: 'レビュー待ち'
+            });
+
             if (reviews.every(review => review.state === 'APPROVED')){
               github.rest.issues.addLabels({
                 owner: context.repo.owner,
@@ -24,5 +31,3 @@ jobs:
                 labels: ['レビュー済み']
               });
             }
-
-
